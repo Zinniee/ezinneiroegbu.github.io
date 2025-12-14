@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SLA & Complaints Dashboard Case Study | Ezinne Iroegbu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="SLA and complaints performance dashboard case study by Data Analyst Ezinne Iroegbu – using Power BI, DAX, Python and SQL to reduce SLA breaches and improve customer experience."
+  />
+  <style>
+    :root {
+      --bg: #050816;
+      --bg-alt: #0b1020;
+      --card-bg: #111827;
+      --primary: #38bdf8;
+      --primary-soft: rgba(56, 189, 248, 0.15);
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+      --accent: #a855f7;
+      --border-subtle: #1f2933;
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.85);
+      --radius-lg: 18px;
+      --radius-pill: 999px;
+      --transition-fast: 0.2s ease-out;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #111827 0, #020617 55%, #020617 100%);
+      color: var(--text-main);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 20px 16px 64px;
+    }
+
+    /* NAVBAR */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(16px);
+      background: linear-gradient(to bottom, rgba(2, 6, 23, 0.92), rgba(2, 6, 23, 0.7));
+      border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+      margin: -20px -16px 24px;
+      padding: 10px 16px;
+    }
+
+    .nav-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 12px;
+      background: radial-gradient(circle at 30% 20%, #38bdf8, #0f172a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      font-size: 14px;
+      color: #e5f7ff;
+      box-shadow: 0 8px 25px rgba(56, 189, 248, 0.45);
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-name {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .brand-role {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .nav-links a {
+      text-decoration: none;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-main);
+    }
+
+    /* BREADCRUMB */
+    .breadcrumb {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+    }
+
+    .breadcrumb a {
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      color: var(--primary);
+      text-decoration: underline;
+    }
+
+    /* HERO */
+    .hero {
+      background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent),
+        radial-gradient(circle at bottom right, rgba(148, 163, 184, 0.15), transparent),
+        var(--card-bg);
+      border-radius: 22px;
+      padding: 18px 16px 18px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      box-shadow: var(--shadow-soft);
+      margin-bottom: 26px;
+    }
+
+    .hero-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+
+    .hero-eyebrow {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--primary);
+    }
+
+    .hero-title {
+      font-size: clamp(24px, 3vw, 28px);
+      font-weight: 700;
+      margin-top: 4px;
+    }
+
+    .hero-tagline {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 6px;
+      max-width: 540px;
+    }
+
+    .hero-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-align: right;
+    }
+
+    .hero-meta strong {
+      color: #e5e7eb;
+      display: block;
+    }
+
+    .hero-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .chip {
+      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: var(--radius-pill);
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      color: #e5e7eb;
+    }
+
+    /* LAYOUT */
+    .case-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 2.1fr) minmax(0, 1.3fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 800px) {
+      .nav-links {
+        display: none;
+      }
+      .case-layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    section {
+      margin-bottom: 22px;
+    }
+
+    .section-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .section-body {
+      font-size: 13px;
+      color: #e5e7eb;
+    }
+
+    .section-body p + p {
+      margin-top: 6px;
+    }
+
+    .section-body ul {
+      margin-left: 18px;
+      margin-top: 6px;
+      list-style: disc;
+    }
+
+    .section-body li + li {
+      margin-top: 4px;
+    }
+
+    .highlight-box {
+      background: var(--bg-alt);
+      border-radius: var(--radius-lg);
+      padding: 10px 12px;
+      border: 1px solid var(--border-subtle);
+      font-size: 13px;
+      margin-top: 8px;
+    }
+
+    .highlight-box strong {
+      color: #e5e7eb;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+      margin-bottom: 6px;
+    }
+
+    .metric-card {
+      background: radial-gradient(circle at top, var(--primary-soft), transparent),
+        rgba(15, 23, 42, 0.96);
+      border-radius: 14px;
+      padding: 8px 10px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+
+    .metric-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+
+    .metric-value {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .metric-note {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .code-block {
+      background: #020617;
+      border-radius: 10px;
+      border: 1px solid rgba(15, 23, 42, 0.9);
+      padding: 10px 10px;
+      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Courier New", monospace;
+      font-size: 12px;
+      overflow-x: auto;
+      margin-top: 6px;
+    }
+
+    .code-block code {
+      white-space: pre;
+      color: #e5e7eb;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .pill-row span {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+    }
+
+    .sidebar-card {
+      background: var(--bg-alt);
+      border-radius: 16px;
+      padding: 12px 12px;
+      border: 1px solid var(--border-subtle);
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+
+    .sidebar-card h3 {
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .sidebar-card ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .sidebar-card li + li {
+      margin-top: 4px;
+    }
+
+    .sidebar-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(8, 47, 73, 0.92);
+      border: 1px solid rgba(56, 189, 248, 0.7);
+      color: #bae6fd;
+      margin-top: 4px;
+    }
+
+    .footer {
+      margin-top: 24px;
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      padding: 6px 11px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: rgba(15, 23, 42, 0.96);
+      color: #e5e7eb;
+      text-decoration: none;
+      margin-bottom: 10px;
+    }
+
+    .btn-back:hover {
+      border-color: var(--primary);
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="nav-inner">
+      <div class="brand">
+        <div class="brand-logo">EI</div>
+        <div class="brand-text">
+          <div class="brand-name">Ezinne Iroegbu</div>
+          <div class="brand-role">Data Analyst | BI Developer</div>
+        </div>
+      </div>
+      <nav class="nav-links">
+        <a href="index.html#projects">Projects</a>
+        <a href="index.html#skills">Skills</a>
+        <a href="index.html#experience">Experience</a>
+        <a href="index.html#education">Education</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="breadcrumb">
+      <a href="index.html">← Back to portfolio</a> · Case Study
+    </div>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-top">
+            <div>
+                <div class="hero-eyebrow">Case Study · SLA & Complaints Analytics</div>
+                <h1 class="hero-title">SLA & Complaints Performance Dashboard</h1>
+                <p class="hero-tagline">
+                    Using Power BI, DAX, Python and SQL to monitor complaints, reduce SLA breaches to single digits,
+                    and improve customer experience across banking channels.
+                </p>
+             </div>
+        <div class="hero-meta">
+          <strong>Role</strong>
+          Data Analyst (Individual Contributor)<br />
+          <strong>Company</strong>
+          Sterling Bank Plc, Nigeria<br />
+          <strong>Period</strong>
+          Jun 2022 – Jul 2024
+        </div>
+      </div>
+      <div class="hero-chips">
+        <span class="chip">Power BI</span>
+        <span class="chip">DAX</span>
+        <span class="chip">Python</span>
+        <span class="chip">SQL / MySQL</span>
+        <span class="chip">SLA Monitoring</span>
+        <span class="chip">Customer Complaints Analytics</span>
+      </div>
+    </section>
+    <section style="margin-top:-10px;margin-bottom:22px;">
+      <div class="highlight-box">
+        <strong>Note:</strong> Visuals and code snippets are <strong>sanitized</strong>
+        to protect confidential information while demonstrating approach and impact.
+      </div>
+    </section>
+
+
+    <div class="case-layout">
+      <!-- MAIN CONTENT -->
+      <div>
+        <!-- Overview -->
+        <section>
+          <h2 class="section-title">1. Overview</h2>
+          <div class="section-body">
+            <p>
+              At Sterling Bank Plc, customer complaints and SLA performance were monitored through multiple
+              static reports and spreadsheets. This made it hard for leadership to quickly see:
+            </p>
+            <ul>
+              <li>How many complaints were being raised across channels and products.</li>
+              <li>Which teams were breaching SLA targets and why.</li>
+              <li>How complaint resolution performance impacted customer experience and the bottom line.</li>
+            </ul>
+            <p>
+              I designed and built a centralized <strong>SLA & Complaints Performance Dashboard</strong> in Power BI,
+              backed by DAX measures and Python/SQL analytics. It became the single source of truth for tracking
+              complaint volumes, SLA adherence, and root causes.
+            </p>
+
+            <div class="highlight-box">
+              <strong>Headline impact:</strong> the new dashboard helped reduce complaints SLA breaches to
+              <strong>single digits</strong> and consistently maintain customer experience SLAs at around
+              <strong>92%+</strong>.
+            </div>
+          </div>
+        </section>
+
+        <!-- Problem -->
+        <section>
+          <h2 class="section-title">2. Business Problem</h2>
+          <div class="section-body">
+            <p>
+              Before the dashboard, the complaints management process faced several challenges:
+            </p>
+            <ul>
+              <li>
+                <strong>Fragmented reporting:</strong> different teams maintained their own complaint logs,
+                making it hard to get a consolidated view.
+              </li>
+              <li>
+                <strong>Manual tracking:</strong> SLA performance was tracked manually in Excel, which was slow
+                and error-prone.
+              </li>
+              <li>
+                <strong>No clear ownership:</strong> it was difficult to quickly identify which unit/channel
+                was driving SLA breaches.
+              </li>
+              <li>
+                <strong>Limited insight:</strong> reports showed counts, but not trends, patterns, or root causes.
+              </li>
+            </ul>
+            <p>
+              The goal was to build a <strong>live, self-service dashboard</strong> that answered questions like:
+              “Which channels are driving most complaints?”, “Where are we breaching SLAs?”, and
+              “How is our SLA performance trending month-over-month?”
+            </p>
+          </div>
+        </section>
+
+        <!-- Data & Model -->
+        <section>
+          <h2 class="section-title">3. Data Sources & Data Model</h2>
+          <div class="section-body">
+            <p>I worked with several key data sources:</p>
+            <ul>
+              <li>
+                <strong>Complaint tickets data</strong> – ticket ID, customer ID, product, channel, opened date,
+                resolved date, status, SLA target, resolution category.
+              </li>
+              <li>
+                <strong>Customer & product reference data</strong> – mapping to segment, region, product type.
+              </li>
+              <li>
+                <strong>Service measurement metrics</strong> – customer satisfaction scores, NPS-like metrics,
+                and internal performance KPIs.
+              </li>
+            </ul>
+            <p>
+              The data was stored in relational tables (SQL Server / MySQL). I modelled it in Power BI using
+              a <strong>star schema</strong> approach:
+            </p>
+            <ul>
+              <li><strong>FactComplaints</strong> – one row per complaint ticket with timestamps and SLA info.</li>
+              <li><strong>DimCustomer</strong> – customer segment, region, etc.</li>
+              <li><strong>DimProduct</strong> – product type, product group.</li>
+              <li><strong>DimChannel</strong> – branch, mobile app, contact centre, etc.</li>
+              <li><strong>DimDate</strong> – standard calendar table for time intelligence.</li>
+            </ul>
+
+            <div class="highlight-box">
+              <strong>Key decision:</strong> keep the model lean and analytics-ready by separating complaint facts
+              from descriptive dimensions and building reusable DAX measures on top.
+            </div>
+          </div>
+        </section>
+
+        <!-- Metrics & DAX -->
+        <section>
+          <h2 class="section-title">4. Core Metrics & DAX Logic</h2>
+          <div class="section-body">
+            <p>
+              I worked with stakeholders to define the core metrics that really mattered to them:
+            </p>
+            <ul>
+              <li><strong>Total Complaints</strong> – number of complaint tickets in a period.</li>
+              <li><strong>Within SLA</strong> – tickets closed on or before SLA due date.</li>
+              <li><strong>SLA Breaches</strong> – tickets closed after SLA due date or still open past SLA.</li>
+              <li><strong>% SLA Met</strong> – percentage of complaints resolved within SLA.</li>
+              <li><strong>Avg Resolution Time</strong> – average hours/days to close a complaint.</li>
+            </ul>
+
+            <p>Example DAX measures (simplified):</p>
+            <div class="code-block">
+              <code>
+-- Total Complaints
+Total Complaints :=
+COUNTROWS ( 'FactComplaints' )
+
+-- Complaints Resolved Within SLA
+Complaints Within SLA :=
+CALCULATE (
+    [Total Complaints],
+    'FactComplaints'[ResolvedDate] &lt;= 'FactComplaints'[SLA_DueDate],
+    'FactComplaints'[Status] = "Closed"
+)
+
+-- SLA Breaches
+SLA Breaches :=
+CALCULATE (
+    [Total Complaints],
+    'FactComplaints'[ResolvedDate] &gt; 'FactComplaints'[SLA_DueDate]
+        || (
+            'FactComplaints'[Status] &lt;&gt; "Closed"
+            && TODAY() &gt; 'FactComplaints'[SLA_DueDate]
+        )
+)
+
+-- SLA Met %
+SLA Met % :=
+DIVIDE ( [Complaints Within SLA], [Total Complaints] )
+
+-- Average Resolution Time (in hours)
+Avg Resolution Time (hrs) :=
+AVERAGEX (
+    'FactComplaints',
+    DATEDIFF ( 'FactComplaints'[OpenedDate], 'FactComplaints'[ResolvedDate], HOUR )
+)
+              </code>
+            </div>
+
+            <p>
+              For deeper analysis, I also used <strong>Python</strong> and <strong>SQL</strong> to:
+            </p>
+            <ul>
+              <li>Identify patterns in complaint reasons and repeat offenders.</li>
+              <li>Group complaints by severity and channel.</li>
+              <li>Generate distributions and trend lines used in Power BI visuals.</li>
+            </ul>
+          </div>
+        </section>
+
+
+<section>
+  <h2 class="section-title">4a. SQL Aggregation (Sanitized)</h2>
+  <div class="section-body">
+    <p>
+      Below is a representative query structure used to produce a ticket-level fact table and SLA indicators.
+      Table/column names are generalized.
+    </p>
+    <div class="code-block"><code>
+-- SLA-ready complaint fact table (sanitized)
+
+WITH base AS (
+  SELECT
+    ticket_id,
+    customer_id,
+    channel,
+    product,
+    opened_at,
+    resolved_at,
+    status,
+    sla_hours
+  FROM complaints
+  WHERE opened_at &gt;= DATEADD(month, -12, GETDATE())
+),
+derived AS (
+  SELECT
+    ticket_id,
+    customer_id,
+    channel,
+    product,
+    opened_at,
+    resolved_at,
+    status,
+    DATEADD(hour, sla_hours, opened_at) AS sla_due_at,
+    DATEDIFF(hour, opened_at, COALESCE(resolved_at, GETDATE())) AS age_hours
+  FROM base
+)
+SELECT
+  *,
+  CASE
+    WHEN status = 'Closed' AND resolved_at &lt;= sla_due_at THEN 1
+    ELSE 0
+  END AS within_sla_flag,
+  CASE
+    WHEN status = 'Closed' AND resolved_at &gt; sla_due_at THEN 1
+    WHEN status &lt;&gt; 'Closed' AND GETDATE() &gt; sla_due_at THEN 1
+    ELSE 0
+  END AS breach_flag
+FROM derived;
+    </code></div>
+  </div>
+</section>
+
+
+
+        <!-- Dashboard Design -->
+        <section>
+          <h2 class="section-title">5. Dashboard Design & User Experience</h2>
+          <div class="section-body">
+            <p>
+              I designed the Power BI dashboard with three main layers:
+            </p>
+            <ul>
+              <li>
+                <strong>Executive Summary</strong> – SLA Met %, SLA Breaches, Total Complaints, broken down by
+                month, region, and channel. This gave leadership a quick pulse of performance.
+              </li>
+              <li>
+                <strong>Operations View</strong> – detailed breakdown by product, channel, team/owner, and
+                complaint type. It allowed operations managers to zoom into problem areas.
+              </li>
+              <li>
+                <strong>Root Cause & Trend Analysis</strong> – category-wise trends, repeated complaint drivers,
+                and customer segment impact.
+              </li>
+            </ul>
+
+            <div class="highlight-box">
+              <strong>Examples of filters and interactions:</strong>
+              <ul>
+                <li>Filter to “Mobile App” channel and see SLA performance by month.</li>
+                <li>Drill down into “Card” complaints and identify the top 3 root causes.</li>
+                <li>Compare SLA Met % between branches and digital channels.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+
+<section>
+  <h2 class="section-title">5a. Dashboard Preview</h2>
+  <div class="section-body">
+    <p>
+      The screenshots below are <strong>sanitized previews</strong> included only to demonstrate layout and analysis approach.
+      Sensitive details have been redacted.
+    </p>
+    <div style="display:grid;grid-template-columns:1fr;gap:12px;margin-top:12px;">
+      <figure style="background:var(--bg-alt);border:1px solid var(--border-subtle);border-radius:16px;padding:10px;">
+        <img src="assets/sla/sla-preview-1.png" alt="SLA dashboard preview 1 (sanitized)" style="width:100%;border-radius:12px;display:block;" />
+        <figcaption style="font-size:12px;color:var(--text-muted);margin-top:8px;">Executive overview layout: high-level KPIs and distribution panels.</figcaption>
+      </figure>
+      <figure style="background:var(--bg-alt);border:1px solid var(--border-subtle);border-radius:16px;padding:10px;">
+        <img src="assets/sla/sla-preview-2.png" alt="SLA dashboard preview 2 (sanitized)" style="width:100%;border-radius:12px;display:block;" />
+        <figcaption style="font-size:12px;color:var(--text-muted);margin-top:8px;">Operations analysis layout: resolution rate, SLA adherence rate, and top drivers.</figcaption>
+      </figure>
+      <figure style="background:var(--bg-alt);border:1px solid var(--border-subtle);border-radius:16px;padding:10px;">
+        <img src="assets/sla/sla-preview-3.png" alt="SLA dashboard preview 3 (sanitized)" style="width:100%;border-radius:12px;display:block;" />
+        <figcaption style="font-size:12px;color:var(--text-muted);margin-top:8px;">Drill-down layout: category and sub-category breakdown for deeper RCA.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+
+
+        <!-- Impact -->
+        <section>
+          <h2 class="section-title">6. Results & Business Impact</h2>
+          <div class="section-body">
+            <p>
+              The SLA dashboard became the central reference point for complaint performance in the bank.
+              Some of the key outcomes:
+            </p>
+
+            <div class="metrics-grid">
+              <div class="metric-card">
+                <div class="metric-label">SLA Breaches</div>
+                <div class="metric-value">Single digits</div>
+                <div class="metric-note">
+                  Complaint SLA breaches reduced to single-digit percentages after adoption.
+                </div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-label">Customer SLA</div>
+                <div class="metric-value">≈ 92%+</div>
+                <div class="metric-note">
+                  Sustained SLA performance around 92% for customer experience.
+                </div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-label">Reporting Time</div>
+                <div class="metric-value">Greatly reduced</div>
+                <div class="metric-note">
+                  Weekly and monthly reports generated from a single dashboard instead of manual spreadsheets.
+                </div>
+              </div>
+            </div>
+
+            <p>
+              Beyond the numbers, the dashboard changed how teams discussed performance:
+            </p>
+            <ul>
+              <li>Leadership reviews included SLA metrics as a standing agenda item.</li>
+              <li>Operations teams could proactively identify channels or products trending poorly.</li>
+              <li>Customer experience initiatives were linked directly to data rather than anecdotal evidence.</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- Challenges -->
+        <section>
+          <h2 class="section-title">7. Challenges & How I Addressed Them</h2>
+          <div class="section-body">
+            <p><strong>1. Inconsistent timestamps & missing SLA fields</strong></p>
+            <p>
+              Some complaints had missing SLA due dates or incorrect timestamps. I:
+            </p>
+            <ul>
+              <li>Applied business rules to infer SLA where possible (e.g. product-level SLAs).</li>
+              <li>Flagged records with unreliable data and excluded them from SLA % but included them in volume tracking.</li>
+            </ul>
+
+            <p><strong>2. Different SLA rules across products</strong></p>
+            <p>
+              Products like cards, loans, and digital channels had different SLA rules. I:
+            </p>
+            <ul>
+              <li>Worked with stakeholders to codify SLA rules per product/channel.</li>
+              <li>Implemented a rules table (Product SLA Matrix) referenced in DAX to compute SLA due dates more consistently.</li>
+            </ul>
+
+            <p><strong>3. Driving adoption</strong></p>
+            <p>
+              A new dashboard is only useful if teams use it. To encourage adoption, I:
+            </p>
+            <ul>
+              <li>Ran short training sessions for operations and customer experience teams.</li>
+              <li>Created a one-page “how to read this dashboard” guide.</li>
+              <li>Iterated on the layout based on feedback to keep the most-used views easy to access.</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- Future Improvements -->
+        <section>
+          <h2 class="section-title">8. Future Enhancements</h2>
+          <div class="section-body">
+            <p>
+              If I extended this project further, I would:
+            </p>
+            <ul>
+              <li>
+                <strong>Incorporate predictive alerts:</strong> use historical SLA breaches to predict weeks or products
+                at higher risk and trigger early warnings.
+              </li>
+              <li>
+                <strong>Integrate with case management tools:</strong> embed Power BI views directly into the complaint
+                handling system to give agents live context.
+              </li>
+              <li>
+                <strong>Link financial impact:</strong> quantify the cost of SLA breaches and show a direct link
+                between improved SLA and revenue retention.
+              </li>
+            </ul>
+            <p>
+              Overall, this project showcased my ability to move from raw operational data to a
+              <strong>trusted, decision-driving SLA dashboard</strong> that supports both strategic and day-to-day decisions.
+            </p>
+          </div>
+        </section>
+
+        <a href="index.html#projects" class="btn-back">
+          ← Back to all projects
+        </a>
+      </div>
+
+      <!-- SIDEBAR -->
+      <aside>
+        <div class="sidebar-card">
+          <h3>Project Snapshot</h3>
+          <div class="sidebar-label">Goal</div>
+          <p>
+            Provide a single source of truth for complaints and SLA performance, reduce SLA breaches,
+            and improve customer experience.
+          </p>
+          <div class="sidebar-label" style="margin-top:8px;">My role</div>
+          <p>
+            End-to-end: data modelling, DAX measure design, dashboard UX, and stakeholder training.
+          </p>
+        </div>
+
+        <div class="sidebar-card">
+          <h3>Tech Stack</h3>
+          <ul>
+            <li>Power BI (data model & visuals)</li>
+            <li>DAX (SLA measures & time intelligence)</li>
+            <li>SQL / MySQL (data extraction & prep)</li>
+            <li>Python (trend & pattern analysis)</li>
+          </ul>
+          <div class="badge">
+            <span>✔</span>
+            <span>Live SLA monitoring for leadership</span>
+          </div>
+        </div>
+
+        <div class="sidebar-card">
+          <h3>Key Outputs</h3>
+          <ul>
+            <li>Central SLA & complaints dashboard in Power BI.</li>
+            <li>Reusable DAX measures for SLA and resolution KPIs.</li>
+            <li>Standardized definitions of SLA by product and channel.</li>
+            <li>Improved reporting cadence (weekly/monthly) with minimal manual effort.</li>
+          </ul>
+        </div>
+
+        <div class="sidebar-card">
+          <h3>Relevant For</h3>
+          <p>
+            This style of dashboard is directly applicable to:
+          </p>
+          <ul>
+            <li>Contact centre & support analytics.</li>
+            <li>Service-level monitoring in SaaS or fintech.</li>
+            <li>Operations and risk teams needing SLA visibility.</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+
+    <footer class="footer">
+      © <span id="year"></span> Ezinne Iroegbu · SLA & Complaints Performance Case Study
+    </footer>
+  </main>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ezinne Iroegbu | Data Analyst Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="Portfolio of Ezinne Iroegbu, Data Analyst specializing in Power BI, Tableau, SQL, Python, and data storytelling."
+  />
+  <style>
+    :root {
+      --bg: #050816;
+      --bg-alt: #0b1020;
+      --card-bg: #111827;
+      --primary: #38bdf8;
+      --primary-soft: rgba(56, 189, 248, 0.15);
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+      --accent: #a855f7;
+      --border-subtle: #1f2933;
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.85);
+      --radius-lg: 18px;
+      --radius-pill: 999px;
+      --transition-fast: 0.2s ease-out;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #111827 0, #020617 55%, #020617 100%);
+      color: var(--text-main);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .page {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 20px 16px 64px;
+    }
+
+    /* NAVBAR */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(16px);
+      background: linear-gradient(to bottom, rgba(2, 6, 23, 0.92), rgba(2, 6, 23, 0.7));
+      border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+      margin: -20px -16px 24px;
+      padding: 10px 16px;
+    }
+
+    .nav-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: radial-gradient(circle at 30% 20%, #38bdf8, #0f172a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      font-size: 14px;
+      color: #e5f7ff;
+      box-shadow: 0 8px 25px rgba(56, 189, 248, 0.45);
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-name {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .brand-role {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 18px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .nav-links a {
+      padding: 6px 0;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      width: 0;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      transition: width var(--transition-fast);
+    }
+
+    .nav-links a:hover {
+      color: var(--text-main);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    /* HERO */
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2.5fr);
+      align-items: center;
+      gap: 32px;
+      margin-top: 16px;
+      margin-bottom: 40px;
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--primary);
+      padding: 2px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.12), transparent);
+      width: fit-content;
+      margin-bottom: 10px;
+    }
+
+    .hero-title {
+      font-size: clamp(28px, 4vw, 34px);
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      margin-bottom: 12px;
+    }
+
+    .hero-title span {
+      background: linear-gradient(90deg, #38bdf8, #a855f7);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: 15px;
+      color: var(--text-muted);
+      max-width: 540px;
+      margin-bottom: 18px;
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .tag {
+      font-size: 11px;
+      padding: 5px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.28);
+      background: rgba(15, 23, 42, 0.9);
+      color: #d1d5db;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 9px 16px;
+      border-radius: var(--radius-pill);
+      border: 1px solid transparent;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background var(--transition-fast), color var(--transition-fast),
+        transform var(--transition-fast), box-shadow var(--transition-fast),
+        border-color var(--transition-fast);
+      background: transparent;
+      color: var(--text-main);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+      color: #0b1220;
+      font-weight: 600;
+      box-shadow: 0 14px 34px rgba(56, 189, 248, 0.45);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 40px rgba(56, 189, 248, 0.55);
+    }
+
+    .btn-ghost {
+      border-color: rgba(148, 163, 184, 0.4);
+      background: rgba(15, 23, 42, 0.9);
+      color: #e5e7eb;
+    }
+
+    .btn-ghost:hover {
+      border-color: rgba(148, 163, 184, 0.8);
+      background: rgba(15, 23, 42, 1);
+      transform: translateY(-1px);
+    }
+
+    .hero-note {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .hero-right {
+      justify-self: stretch;
+    }
+
+    .hero-card {
+      background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.12), transparent),
+        radial-gradient(circle at bottom, rgba(148, 163, 184, 0.15), transparent),
+        var(--card-bg);
+      border-radius: 22px;
+      padding: 18px 18px 16px;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .hero-card-title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .hero-card-caption {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .hero-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .hero-pill {
+      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: var(--radius-pill);
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      color: #e5e7eb;
+    }
+
+    .hero-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .metric {
+      padding: 8px 10px;
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(148, 163, 184, 0.32);
+    }
+
+    .metric-label {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 2px;
+    }
+
+    .metric-value {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .metric-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .hero-card-badge {
+      position: absolute;
+      right: 16px;
+      top: 16px;
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      background: rgba(8, 47, 73, 0.92);
+      border: 1px solid rgba(56, 189, 248, 0.7);
+      color: #bae6fd;
+    }
+
+    /* SECTIONS */
+    section {
+      margin-bottom: 40px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .section-kicker {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* SKILLS */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+    .skill-card {
+      background: var(--bg-alt);
+      border-radius: var(--radius-lg);
+      padding: 12px 14px 14px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .skill-title {
+      font-size: 14px;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* EXPERIENCE */
+    .timeline {
+      border-left: 1px solid rgba(31, 41, 55, 0.9);
+      padding-left: 14px;
+      margin-left: 4px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-left: 10px;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: -15px;
+      top: 4px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--primary), #0ea5e9);
+      box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.18);
+    }
+
+    .timeline-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 4px;
+      flex-wrap: wrap;
+    }
+
+    .timeline-role {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .timeline-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .timeline-body {
+      font-size: 13px;
+      color: #e5e7eb;
+    }
+
+    .timeline-body ul {
+      list-style: disc;
+      margin-left: 16px;
+      margin-top: 4px;
+    }
+
+    /* PROJECTS */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .project-card {
+      background: radial-gradient(circle at top, var(--primary-soft), transparent),
+        var(--card-bg);
+      border-radius: var(--radius-lg);
+      padding: 14px 14px 12px;
+      border: 1px solid rgba(148, 163, 184, 0.42);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .project-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .project-title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .project-chip {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(148, 163, 184, 0.42);
+      color: #e5e7eb;
+      white-space: nowrap;
+    }
+
+    .project-body {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .project-meta {
+      font-size: 11px;
+      color: #cbd5f5;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .pill-row span {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+    }
+
+    .project-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 6px;
+      font-size: 12px;
+    }
+
+    .project-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: rgba(15, 23, 42, 0.96);
+      color: #e5e7eb;
+      cursor: pointer;
+      transition: transform var(--transition-fast), border-color var(--transition-fast),
+        background var(--transition-fast);
+    }
+
+    .project-link:hover {
+      transform: translateY(-1px);
+      border-color: var(--primary);
+      background: rgba(15, 23, 42, 1);
+    }
+
+    .project-link span {
+      font-size: 14px;
+    }
+
+    /* EDUCATION & CERTS */
+    .two-col {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.4fr);
+      gap: 16px;
+    }
+
+    .list-card {
+      background: var(--bg-alt);
+      border-radius: var(--radius-lg);
+      padding: 12px 14px;
+      border: 1px solid var(--border-subtle);
+      font-size: 13px;
+    }
+
+    .list-card h3 {
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .list-card ul {
+      list-style: none;
+      display: grid;
+      gap: 6px;
+    }
+
+    .list-card li span {
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    /* CONTACT */
+    .contact-card {
+      background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.12), transparent),
+        var(--card-bg);
+      border-radius: 20px;
+      padding: 16px 16px 14px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      display: grid;
+      gap: 10px;
+      font-size: 13px;
+    }
+
+    .contact-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .contact-item {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .contact-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+
+    .contact-value a {
+      color: var(--primary);
+    }
+
+    .footer {
+      margin-top: 22px;
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 800px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .hero-right {
+        order: -1;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .two-col {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .page {
+        padding-inline: 14px;
+      }
+
+      .hero-card {
+        padding: 14px;
+      }
+
+      .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="nav-inner">
+      <div class="brand">
+        <div class="brand-logo">EI</div>
+        <div class="brand-text">
+          <div class="brand-name">Ezinne Iroegbu</div>
+          <div class="brand-role">Data Analyst | BI Developer</div>
+        </div>
+      </div>
+      <nav class="nav-links">
+        <a href="#projects">Projects</a>
+        <a href="#skills">Skills</a>
+        <a href="#experience">Experience</a>
+        <a href="#education">Education</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page">
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <div>
+        <div class="eyebrow">Data Analytics · BI · SQL · Power BI</div>
+        <h1 class="hero-title">
+          Hi, I’m <span>Ezinne</span> – a data analyst turning messy data into clear business decisions.
+        </h1>
+        <p class="hero-subtitle">
+          I build automated analytics pipelines, interactive dashboards, and self-service reporting that empower
+          teams to move faster and make better decisions across fintech, banking, mobility, and HR.
+        </p>
+        <div class="hero-tags">
+          <span class="tag">Power BI &amp; DAX</span>
+          <span class="tag">Tableau</span>
+          <span class="tag">Python</span>
+          <span class="tag">SQL (SQL Server, MySQL, PostgreSQL)</span>
+          <span class="tag">Dashboard Design</span>
+          <span class="tag">SLA &amp; KPI Reporting</span>
+        </div>
+
+        <div class="hero-actions">
+          <a href="#projects" class="btn btn-primary">
+            <span>View Analytics Projects</span>
+            <span>↗</span>
+          </a>
+          <a href="mailto:eiroegbu97@gmail.com" class="btn btn-ghost">
+            <span>Get in touch</span>
+          </a>
+        </div>
+        <p class="hero-note">
+          Open to roles in data analytics · BI · product analytics · dashboard engineering.
+        </p>
+      </div>
+
+      <aside class="hero-right">
+        <div class="hero-card">
+          <div class="hero-card-badge">5+ years in analytics</div>
+          <div class="hero-card-header">
+            <div>
+              <div class="hero-card-title">Analytics Snapshot</div>
+              <div class="hero-card-caption">
+                Impact across fintech, banking, mobility &amp; HR analytics
+              </div>
+            </div>
+          </div>
+          <div class="hero-pills">
+            <span class="hero-pill">Self-service BI &amp; paginated reports</span>
+            <span class="hero-pill">KPI dashboards</span>
+            <span class="hero-pill">Customer &amp; SLA analytics</span>
+          </div>
+          <div class="hero-metrics">
+            <div class="metric">
+              <div class="metric-label">SLA Improvement</div>
+              <div class="metric-value">92%+</div>
+              <div class="metric-sub">customer SLA at Sterling Bank</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">Productivity</div>
+              <div class="metric-value">+35%</div>
+              <div class="metric-sub">via HR &amp; ops dashboards</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">Revenue Impact</div>
+              <div class="metric-value">+48.7%</div>
+              <div class="metric-sub">from automated insights</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects">
+      <div class="section-header">
+        <h2 class="section-title">Featured Analytics Projects</h2>
+      </div>
+
+      <div class="projects-grid">
+        <!-- Project 1 -->
+        <article class="project-card">
+          <div class="project-header">
+            <div>
+              <h3 class="project-title">Automated SQL Reporting Engine – Fintech</h3>
+              <p class="project-meta">Flutterwave · 2024–Present</p>
+            </div>
+            <span class="project-chip">Automation · SQL · BI</span>
+          </div>
+        
+          <div class="project-body">
+            Automated core analytics queries powering compliance, finance, and operations reporting.
+            Reduced manual reporting turnaround time by over <strong>70%</strong> and enabled near
+            real-time internal dashboards.
+          </div>
+        
+          <div class="pill-row">
+            <span>SQL Server</span>
+            <span>Power BI Report Server</span>
+            <span>ETL / scheduling</span>
+          </div>
+        
+          <div class="project-links">
+            <!-- Primary safe action -->
+            <a class="project-link" href="redacted.html">
+              <span>🔒</span>
+              <span>Artifacts redacted (available on request)</span>
+            </a>
+          </div>
+        </article>
+        
+        <!-- Project 2 -->
+        <article class="project-card">
+          <div class="project-header">
+            <div>
+              <h3 class="project-title">Complaint &amp; SLA Performance Dashboard</h3>
+              <p class="project-meta">Sterling Bank Plc · 2022–2024</p>
+            </div>
+            <span class="project-chip">SLA · KPI · Power BI</span>
+          </div>
+        
+          <div class="project-body">
+            Built a complaint performance dashboard to track SLAs by channel, product, and root cause.
+            Helped reduce complaint SLA breaches to <strong>single digits</strong> and improved visibility
+            for leadership.
+          </div>
+        
+          <div class="pill-row">
+            <span>Power BI</span>
+            <span>DAX measures</span>
+            <span>Customer support analytics</span>
+          </div>
+        
+          <div class="project-links">
+            <!-- Primary safe link -->
+            <a class="project-link" href="sla-dashboard.html">
+              <span>📖</span>
+              <span>Read full case study</span>
+            </a>
+          </div>
+        </article>
+        
+        <!-- Project 3 -->
+        <article class="project-card">
+          <div class="project-header">
+            <div>
+              <h3 class="project-title">Customer Segmentation &amp; RFM Model</h3>
+              <p class="project-meta">Shuttlers · 2021–2022</p>
+            </div>
+            <span class="project-chip">RFM · Segmentation</span>
+          </div>
+        
+          <div class="project-body">
+            Implemented RFM-based customer segmentation for B2C riders.
+            Enabled targeted marketing campaigns and improved B2C user acquisition
+            rate by <strong>34.75%</strong> in H1 2022.
+          </div>
+        
+          <div class="pill-row">
+            <span>Tableau</span>
+            <span>Python</span>
+            <span>MySQL</span>
+            <span>RFM analysis</span>
+          </div>
+        
+          <div class="project-links">
+            <!-- Primary safe link -->
+            <a class="project-link" href="rfm-case-study.html">
+              <span>📖</span>
+              <span>Read full case study</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- Project 4 -->
+        <article class="project-card">
+          <div class="project-header">
+            <div>
+              <h3 class="project-title">Organization KPI Databox Automation</h3>
+              <p class="project-meta">Shuttlers · 2021–2022</p>
+            </div>
+            <span class="project-chip">KPI · Automation</span>
+          </div>
+          <div class="project-body">
+            Led the creation and automation of an internal KPI “Databox” used across departments for daily performance
+            tracking. Improved visibility and contributed to a <strong>35% increase</strong> in staff productivity.
+          </div>
+          <div class="pill-row">
+            <span>Metabase</span>
+            <span>Python</span>
+            <span>Process improvement</span>
+          </div>
+          <div class="project-links">
+            <!-- Primary safe action -->
+            <a class="project-link" href="redacted.html">
+              <span>🔒</span>
+              <span>Artifacts redacted (available on request)</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- Project 5 -->
+        <article class="project-card">
+          <div class="project-header">
+            <div>
+              <h3 class="project-title">HR Analytics &amp; 9-Box Talent Dashboard</h3>
+              <p class="project-meta">Tek Experts · 2019–2021</p>
+            </div>
+            <span class="project-chip">HR Analytics</span>
+          </div>
+          <div class="project-body">
+            Built dashboards and analytical views for HR leadership to track talent, performance, and engagement for
+            <strong>3,500+ employees</strong>, using 9-box tools and CSAT metrics to guide decisions.
+          </div>
+          <div class="pill-row">
+            <span>Power BI</span>
+            <span>Excel</span>
+            <span>Talent / CSAT analytics</span>
+          </div>
+          <div class="project-links">
+            <!-- Primary safe action -->
+            <a class="project-link" href="redacted.html">
+              <span>🔒</span>
+              <span>Artifacts redacted (available on request)</span>
+            </a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills">
+      <div class="section-header">
+        <h2 class="section-title">Skills &amp; Tools</h2>
+        <p class="section-kicker">What I use to deliver impact across teams.</p>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-card">
+          <h3 class="skill-title">Data Analytics</h3>
+          <div class="skill-tags">
+            <span>Exploratory analysis</span>
+            <span>Descriptive &amp; diagnostic</span>
+            <span>Ad-hoc analysis</span>
+            <span>Root cause analysis</span>
+          </div>
+        </div>
+        <div class="skill-card">
+          <h3 class="skill-title">Visualization &amp; BI</h3>
+          <div class="skill-tags">
+            <span>Microsoft Fabric (DP-600)</span>
+            <span>Power BI (PL-300)</span>
+            <span>Tableau</span>
+            <span>Metabase</span>
+            <span>Canva storytelling</span>
+          </div>
+        </div>
+        <div class="skill-card">
+          <h3 class="skill-title">Data Engineering-lite</h3>
+          <div class="skill-tags">
+            <span>SQL Server</span>
+            <span>MySQL</span>
+            <span>PostgreSQL</span>
+            <span>Query optimization</span>
+          </div>
+        </div>
+        <div class="skill-card">
+          <h3 class="skill-title">Programming</h3>
+          <div class="skill-tags">
+            <span>Python</span>
+            <span>Pandas</span>
+            <span>Scripts &amp; notebooks</span>
+          </div>
+        </div>
+        <div class="skill-card">
+          <h3 class="skill-title">Reporting &amp; Communication</h3>
+          <div class="skill-tags">
+            <span>Paginated reports</span>
+            <span>Executive summaries</span>
+            <span>PowerPoint decks</span>
+            <span>Stakeholder alignment</span>
+          </div>
+        </div>
+        <div class="skill-card">
+          <h3 class="skill-title">Ways of Working</h3>
+          <div class="skill-tags">
+            <span>Agile / Scrum</span>
+            <span>Jira</span>
+            <span>Cross-functional collab</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section id="experience">
+      <div class="section-header">
+        <h2 class="section-title">Professional Experience</h2>
+        <p class="section-kicker">
+          A journey through fintech, banking, mobility, and HR analytics.
+        </p>
+      </div>
+      <div class="timeline">
+        <!-- Flutterwave -->
+        <article class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-header">
+            <div>
+              <h3 class="timeline-role">Data Analyst – Flutterwave</h3>
+              <p class="timeline-meta">Aug 2024 – Present · Remote (San Francisco)</p>
+            </div>
+          </div>
+          <div class="timeline-body">
+            <ul>
+              <li>Develop BI dashboards and analytics reporting for internal stakeholders.</li>
+              <li>Automate SQL queries, reducing TAT by over 70%.</li>
+              <li>Own ad-hoc analytics requests and tickets within SLA.</li>
+              <li>Create self-service paginated reports and live Power BI apps to drive data adoption.</li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- Sterling Bank -->
+        <article class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-header">
+            <div>
+              <h3 class="timeline-role">Data Analyst – Sterling Bank Plc</h3>
+              <p class="timeline-meta">Jun 2022 – Jul 2024 · Nigeria</p>
+            </div>
+          </div>
+          <div class="timeline-body">
+            <ul>
+              <li>Used Python and DAX to identify trends and build predictive insights.</li>
+              <li>Built weekly Power BI reports that reduced complaint SLA breaches to single digits.</li>
+              <li>Produced monthly insight reports on Canva to show bottom-line impact.</li>
+              <li>Improved existing dashboards and used MySQL + Python for CRM analytics, achieving 92% SLA performance.</li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- Shuttlers -->
+        <article class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-header">
+            <div>
+              <h3 class="timeline-role">Data Analyst – Shuttlers</h3>
+              <p class="timeline-meta">Oct 2021 – Jun 2022 · Nigeria</p>
+            </div>
+          </div>
+          <div class="timeline-body">
+            <ul>
+              <li>Created weekly revenue and sales metrics dashboards using Metabase.</li>
+              <li>Partnered with engineering and leadership on data integrity and process improvements.</li>
+              <li>Led automation of an organization-wide KPI Databox for departmental metrics.</li>
+              <li>Used ArcGIS for geospatial analysis of daily usage and Python/MySQL for customer analytics.</li>
+              <li>Achieved 48.7% revenue increase and 35% productivity boost, plus 34.75% B2C user acquisition growth in H1 2022.</li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- Tek Experts -->
+        <article class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-header">
+            <div>
+              <h3 class="timeline-role">Data Analyst – HR, Tek Experts</h3>
+              <p class="timeline-meta">Nov 2019 – Oct 2021 · Nigeria</p>
+            </div>
+          </div>
+          <div class="timeline-body">
+            <ul>
+              <li>Analyzed HR data to solve process issues and improve internal workflows.</li>
+              <li>Used 9-box tool for talent management of 3,500+ employees, increasing productivity by 22%.</li>
+              <li>Built Excel tracking and Power BI dashboards for KPIs and CSAT, improving productivity by 35%.</li>
+              <li>Collaborated with HR partners and delivered regular and ad-hoc reports for stakeholders.</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- EDUCATION & CERTIFICATIONS -->
+    <section id="education">
+      <div class="section-header">
+        <h2 class="section-title">Education &amp; Certifications</h2>
+        <p class="section-kicker">Formal training backing real-world analytics experience.</p>
+      </div>
+      <div class="two-col">
+        <div class="list-card">
+          <h3>Education</h3>
+          <ul>
+            <li>
+              <strong>Postgraduate Certificate in IT</strong><br />
+              <span>British Computer Society, UK · 2022</span>
+            </li>
+            <li>
+              <strong>B.Sc. Biochemistry</strong><br />
+              <span>Michael Okpara University of Agriculture, Umudike · 2019</span>
+            </li>
+          </ul>
+        </div>
+        <div class="list-card">
+          <h3>Certifications</h3>
+          <ul>
+            <li>
+              <strong>Microsoft Certified: Fabric Analytics Engineer</strong><br />
+              <span>Microsoft · 2025</span>
+            </li>
+            <li>
+              <strong>Accelerating End-to-End Data Science Workflows</strong><br />
+              <span>NVIDIA · 2024</span>
+            </li>
+            <li>
+              <strong>Microsoft Certified: Power BI Data Analyst (PL-300)</strong><br />
+              <span>Microsoft · 2021</span>
+            </li>
+            <li>
+              <strong>Scrum Foundation Professional Certificate (SFPC)</strong><br />
+              <span>CertiProf · 2021</span>
+            </li>
+            <li>
+              <strong>Project Management Essentials</strong><br />
+              <span>Management and Strategy Institute · 2020</span>
+            </li>
+            <li>
+              <strong>Data Protection</strong><br />
+              <span>Tek Learning · 2020</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <div class="section-header">
+        <h2 class="section-title">Let’s Work Together</h2>
+        <p class="section-kicker">Reach out for roles, collaborations, or analytics projects.</p>
+      </div>
+      <div class="contact-card">
+        <div class="contact-row">
+          <div>
+            <div class="contact-label">Email</div>
+            <div class="contact-value">
+              <a href="mailto:eiroegbu97@gmail.com">eiroegbu97@gmail.com</a>
+            </div>
+          </div>
+          <div>
+            <div class="contact-label">Phone</div>
+            <div class="contact-value">+1 (437) 876-0285</div>
+          </div>
+          <div>
+            <div class="contact-label">Location</div>
+            <div class="contact-value">Mississauga, Ontario, Canada</div>
+          </div>
+          <div>
+            <div class="contact-label">LinkedIn</div>
+            <div class="contact-value">
+              <a href="https://www.linkedin.com/in/ezinne-iroegbu-6aa291191/" target="_blank" rel="noopener">
+                linkedin.com/in/ezinne-iroegbu-6aa291191/
+              </a>
+            </div>
+          </div>
+        </div>
+        <p>
+          I am especially interested in Data Analyst · BI Analyst · Product Analytics · Reporting &amp; Insights roles.
+          I am comfortable working with distributed teams and remote-first setups.
+        </p>
+      </div>
+
+      <footer class="footer">
+        © <span id="year"></span> Ezinne Iroegbu · Built with HTML &amp; CSS
+      </footer>
+    </section>
+  </main>
+
+  <script>
+    // Set current year in footer
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
+
+<!--
+<h2>Projects</h2>
+<ul>
+  <li><a href="rfm-case-study.html">RFM Customer Segmentation Case Study</a></li>
+  <li><a href="sla-dashboard.html">SLA & Complaints Dashboard Case Study</a></li>
+</ul>
+-->

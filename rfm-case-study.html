@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>RFM Customer Segmentation Case Study | Ezinne Iroegbu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="RFM customer segmentation case study by Data Analyst Ezinne Iroegbu – using Python, MySQL, and Tableau for growth and retention."
+  />
+  <style>
+    :root {
+      --bg: #050816;
+      --bg-alt: #0b1020;
+      --card-bg: #111827;
+      --primary: #38bdf8;
+      --primary-soft: rgba(56, 189, 248, 0.15);
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+      --accent: #a855f7;
+      --border-subtle: #1f2933;
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.85);
+      --radius-lg: 18px;
+      --radius-pill: 999px;
+      --transition-fast: 0.2s ease-out;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #111827 0, #020617 55%, #020617 100%);
+      color: var(--text-main);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 20px 16px 64px;
+    }
+
+    /* NAVBAR */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(16px);
+      background: linear-gradient(to bottom, rgba(2, 6, 23, 0.92), rgba(2, 6, 23, 0.7));
+      border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+      margin: -20px -16px 24px;
+      padding: 10px 16px;
+    }
+
+    .nav-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 12px;
+      background: radial-gradient(circle at 30% 20%, #38bdf8, #0f172a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      font-size: 14px;
+      color: #e5f7ff;
+      box-shadow: 0 8px 25px rgba(56, 189, 248, 0.45);
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-name {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .brand-role {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .nav-links a {
+      text-decoration: none;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-main);
+    }
+
+    /* BREADCRUMB */
+    .breadcrumb {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+    }
+
+    .breadcrumb a {
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      color: var(--primary);
+      text-decoration: underline;
+    }
+
+    /* HERO */
+    .hero {
+      background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent),
+        radial-gradient(circle at bottom right, rgba(148, 163, 184, 0.15), transparent),
+        var(--card-bg);
+      border-radius: 22px;
+      padding: 18px 16px 18px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      box-shadow: var(--shadow-soft);
+      margin-bottom: 26px;
+    }
+
+    .hero-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+
+    .hero-eyebrow {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--primary);
+    }
+
+    .hero-title {
+      font-size: clamp(24px, 3vw, 28px);
+      font-weight: 700;
+      margin-top: 4px;
+    }
+
+    .hero-tagline {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 6px;
+      max-width: 540px;
+    }
+
+    .hero-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-align: right;
+    }
+
+    .hero-meta strong {
+      color: #e5e7eb;
+      display: block;
+    }
+
+    .hero-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .chip {
+      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: var(--radius-pill);
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      color: #e5e7eb;
+    }
+
+    /* LAYOUT */
+    .case-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 2.1fr) minmax(0, 1.3fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 800px) {
+      .nav-links {
+        display: none;
+      }
+      .case-layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    section {
+      margin-bottom: 22px;
+    }
+
+    .section-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .section-body {
+      font-size: 13px;
+      color: #e5e7eb;
+    }
+
+    .section-body p + p {
+      margin-top: 6px;
+    }
+
+    .section-body ul {
+      margin-left: 18px;
+      margin-top: 6px;
+      list-style: disc;
+    }
+
+    .section-body li + li {
+      margin-top: 4px;
+    }
+
+    .highlight-box {
+      background: var(--bg-alt);
+      border-radius: var(--radius-lg);
+      padding: 10px 12px;
+      border: 1px solid var(--border-subtle);
+      font-size: 13px;
+      margin-top: 8px;
+    }
+
+    .highlight-box strong {
+      color: #e5e7eb;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+      margin-bottom: 6px;
+    }
+
+    .metric-card {
+      background: radial-gradient(circle at top, var(--primary-soft), transparent),
+        rgba(15, 23, 42, 0.96);
+      border-radius: 14px;
+      padding: 8px 10px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+
+    .metric-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+
+    .metric-value {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .metric-note {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .code-block {
+      background: #020617;
+      border-radius: 10px;
+      border: 1px solid rgba(15, 23, 42, 0.9);
+      padding: 10px 10px;
+      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Courier New", monospace;
+      font-size: 12px;
+      overflow-x: auto;
+      margin-top: 6px;
+    }
+
+    .code-block code {
+      white-space: pre;
+      color: #e5e7eb;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .pill-row span {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+    }
+
+    .sidebar-card {
+      background: var(--bg-alt);
+      border-radius: 16px;
+      padding: 12px 12px;
+      border: 1px solid var(--border-subtle);
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+
+    .sidebar-card h3 {
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .sidebar-card ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .sidebar-card li + li {
+      margin-top: 4px;
+    }
+
+    .sidebar-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(8, 47, 73, 0.92);
+      border: 1px solid rgba(56, 189, 248, 0.7);
+      color: #bae6fd;
+      margin-top: 4px;
+    }
+
+    .footer {
+      margin-top: 24px;
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      padding: 6px 11px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: rgba(15, 23, 42, 0.96);
+      color: #e5e7eb;
+      text-decoration: none;
+      margin-bottom: 10px;
+    }
+
+    .btn-back:hover {
+      border-color: var(--primary);
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="nav-inner">
+      <div class="brand">
+        <div class="brand-logo">EI</div>
+        <div class="brand-text">
+          <div class="brand-name">Ezinne Iroegbu</div>
+          <div class="brand-role">Data Analyst | BI Developer</div>
+        </div>
+      </div>
+      <nav class="nav-links">
+        <a href="index.html#projects">Projects</a>
+        <a href="index.html#skills">Skills</a>
+        <a href="index.html#experience">Experience</a>
+        <a href="index.html#education">Education</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="breadcrumb">
+      <a href="index.html">← Back to portfolio</a> · Case Study
+    </div>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-top">
+        <div>
+          <div class="hero-eyebrow">Case Study · Customer Analytics</div>
+          <h1 class="hero-title">RFM Customer Segmentation for a Mobility Startup</h1>
+          <p class="hero-tagline">
+            Using RFM analysis with Python, MySQL, and Tableau to drive targeted marketing,
+            improve retention, and grow B2C acquisition for a tech-enabled transport platform.
+          </p>
+        </div>
+        <div class="hero-meta">
+          <strong>Role</strong>
+          Data Analyst (Individual Contributor)<br />
+          <strong>Company</strong>
+          Shuttlers (Nigeria)<br />
+          <strong>Period</strong>
+          Oct 2021 – Jun 2022
+        </div>
+      </div>
+      <div class="hero-chips">
+        <span class="chip">Python</span>
+        <span class="chip">MySQL</span>
+        <span class="chip">Tableau</span>
+        <span class="chip">RFM Analysis</span>
+        <span class="chip">Customer Segmentation</span>
+      </div>
+    </section>
+    <section style="margin-top:-10px;margin-bottom:22px;">
+      <div class="highlight-box">
+        <strong>Note:</strong> Visuals and code snippets are <strong>sanitized</strong>
+        to protect confidential information while demonstrating approach and impact.
+      </div>
+    </section>
+
+
+    <div class="case-layout">
+      <!-- MAIN CONTENT -->
+      <div>
+        <!-- Overview -->
+        <section>
+          <h2 class="section-title">1. Overview</h2>
+          <div class="section-body">
+            <p>
+              Shuttlers is a mobility startup providing tech-enabled transportation services. The business
+              wanted to move beyond a “one size fits all” approach to B2C riders and start treating customers
+              differently based on their value and engagement.
+            </p>
+            <p>
+              I led the design and implementation of an <strong>RFM customer segmentation model</strong>
+              and an accompanying Tableau dashboard. This allowed marketing and growth teams to see exactly
+              which riders were most valuable, at-risk, or inactive – and to tailor campaigns accordingly.
+            </p>
+
+            <div class="highlight-box">
+              <strong>Headline impact:</strong> Targeted insights from the RFM model contributed to a
+              <strong>34.75% increase in B2C user acquisition</strong> in H1 2022 and improved focus on the most profitable customer segments.
+            </div>
+          </div>
+        </section>
+
+        <!-- Problem -->
+        <section>
+          <h2 class="section-title">2. Business Problem</h2>
+          <div class="section-body">
+            <p>
+              Before this project, all B2C riders were treated as a single group:
+            </p>
+            <ul>
+              <li>No structured definition of “high value” vs “low value” riders.</li>
+              <li>Marketing campaigns were broad and not tailored to behaviour.</li>
+              <li>There was no easy way to see which customers were reactivatable vs truly churned.</li>
+            </ul>
+            <p>
+              The core problem we wanted to solve:
+              <strong>“How can we use transaction and ride data to understand customer value and prioritize
+              marketing efforts?”</strong>
+            </p>
+          </div>
+        </section>
+
+        <!-- Data & Architecture -->
+        <section>
+          <h2 class="section-title">3. Data Sources & Architecture</h2>
+          <div class="section-body">
+            <p>I worked with data from three core systems:</p>
+            <ul>
+              <li>
+                <strong>Ride / Trip data</strong> – ride ID, customer ID, route, fare amount, trip date.
+              </li>
+              <li>
+                <strong>Customer data</strong> – sign-up date, contact information, segment (B2B vs B2C).
+              </li>
+              <li>
+                <strong>Payment data</strong> – transaction amount, timestamps, payment method.
+              </li>
+            </ul>
+            <p>
+              All operational data landed in <strong>MySQL</strong>. For the RFM model, I:
+            </p>
+            <ul>
+              <li>Wrote SQL queries to join and aggregate customer-level metrics.</li>
+              <li>Exported or connected to the data via Python for scoring logic.</li>
+              <li>Pushed the final RFM-scored table to <strong>Tableau</strong> for visualization.</li>
+            </ul>
+
+            <div class="highlight-box">
+              <strong>Key design decision:</strong> Keep the RFM calculations in a reproducible
+              Python/SQL workflow so it could be refreshed on a regular cadence without manual Excel work.
+            </div>
+          </div>
+        </section>
+
+        <!-- Methodology -->
+        <section>
+          <h2 class="section-title">4. RFM Methodology</h2>
+          <div class="section-body">
+            <p>
+              I implemented a standard RFM framework, tailored to the ride context:
+            </p>
+            <ul>
+              <li>
+                <strong>Recency (R):</strong> days since last completed ride.
+              </li>
+              <li>
+                <strong>Frequency (F):</strong> number of completed rides over the last 6–12 months.
+              </li>
+              <li>
+                <strong>Monetary (M):</strong> total fare amount spent over the same period.
+              </li>
+            </ul>
+
+            <p>First, I built a base aggregation in SQL:</p>
+            <div class="code-block">
+              <code>
+-- Aggregate RFM base table (simplified)
+
+SELECT
+    c.customer_id,
+    MAX(t.trip_date)  AS last_trip_date,
+    COUNT(*) AS ride_count,
+    SUM(t.fare_amount) AS total_spend
+FROM trips t
+JOIN customers c
+  ON c.customer_id = t.customer_id
+WHERE t.status = 'completed'
+  AND t.trip_date &gt;= DATE_SUB(CURDATE(), INTERVAL 12 MONTH)
+GROUP BY c.customer_id;
+              </code>
+            </div>
+
+            <p>Then, in Python, I calculated RFM scores and converted them into segments:</p>
+            <div class="code-block">
+              <code>
+import pandas as pd
+from datetime import date
+
+df = rfm_base_df.copy()
+today = date.today()
+
+df["recency_days"] = (today - df["last_trip_date"]).dt.days
+
+# Assign R, F, M scores 1-5 using quantiles (example)
+df["R_score"] = pd.qcut(df["recency_days"], 5, labels=[5,4,3,2,1]).astype(int)
+df["F_score"] = pd.qcut(df["ride_count"],    5, labels=[1,2,3,4,5]).astype(int)
+df["M_score"] = pd.qcut(df["total_spend"],   5, labels=[1,2,3,4,5]).astype(int)
+
+df["RFM_score"] = df["R_score"] + df["F_score"] + df["M_score"]
+
+def assign_segment(row):
+    if row["RFM_score"] &gt;= 13:
+        return "Champions"
+    if row["RFM_score"] &gt;= 10:
+        return "Loyal"
+    if row["R_score"] &gt;= 4 and row["F_score"] &lt;= 2:
+        return "Promising"
+    if row["R_score"] &lt;= 2 and row["F_score"] &gt;= 3:
+        return "At Risk"
+    return "Low Value"
+
+df["segment"] = df.apply(assign_segment, axis=1)
+              </code>
+            </div>
+
+            <p>
+              The exact thresholds were tuned iteratively with marketing and product teams to ensure that
+              segments were both statistically meaningful and business-meaningful.
+            </p>
+          </div>
+        </section>
+
+        <!-- Solution / Dashboard -->
+        <section>
+          <h2 class="section-title">5. Solution Design – Tableau Dashboard</h2>
+          <div class="section-body">
+            <p>
+              Once the RFM table and segments were created, I designed a Tableau dashboard with three layers:
+            </p>
+            <ul>
+              <li>
+                <strong>Executive overview:</strong> total customers by segment, revenue contribution per segment,
+                and trend of active vs inactive riders.
+              </li>
+              <li>
+                <strong>Segment drill-down:</strong> ability to filter by segment (e.g. “Champions”, “At Risk”) and
+                see geo distribution, route usage, and fare patterns.
+              </li>
+              <li>
+                <strong>Customer-level view:</strong> table of riders with their RFM scores, last ride date,
+                and contact information for export into campaign tools.
+              </li>
+            </ul>
+
+            <div class="highlight-box">
+              <strong>Example dashboard interactions:</strong>
+              <ul>
+                <li>Filter to “At Risk” riders with high past monetary value.</li>
+                <li>Export their contact details for a reactivation campaign.</li>
+                <li>Track uplift in rides and revenue after the campaign.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+
+<section>
+  <h2 class="section-title">5a. Dashboard Preview (Mock)</h2>
+  <div class="section-body">
+    <p>
+      The visuals below are <strong>mock previews created with synthetic data</strong> to demonstrate how insights were presented
+      (segment sizes, behavior patterns, and targeting opportunities).
+    </p>
+    <div style="display:grid;grid-template-columns:1fr;gap:12px;margin-top:12px;">
+      <figure style="background:var(--bg-alt);border:1px solid var(--border-subtle);border-radius:16px;padding:12px;margin-top:12px;">
+        <img src="assets/rfm/rfm-full-dashboard-mock.png" alt="RFM full dashboard mock" style="width:100%;border-radius:12px;display:block;" />
+        <figcaption style="font-size:12px;color:var(--text-muted);margin-top:8px;">
+          RFM segmentation dashboard mock: overview KPIs, segments, behavior scatter, revenue contribution, and action plan.
+        </figcaption>
+      </figure>
+      <figure style="background:var(--bg-alt);border:1px solid var(--border-subtle);border-radius:16px;padding:10px;">
+        <img src="assets/rfm/rfm-segment-distribution.png" alt="RFM segment distribution (synthetic)" style="width:100%;border-radius:12px;display:block;" />
+        <figcaption style="font-size:12px;color:var(--text-muted);margin-top:8px;">Segment distribution view: quickly shows where to prioritize retention vs reactivation.</figcaption>
+      </figure>
+      <figure style="background:var(--bg-alt);border:1px solid var(--border-subtle);border-radius:16px;padding:10px;">
+        <img src="assets/rfm/rfm-recency-frequency.png" alt="Recency vs frequency (synthetic)" style="width:100%;border-radius:12px;display:block;" />
+        <figcaption style="font-size:12px;color:var(--text-muted);margin-top:8px;">Behavior view: recency vs frequency used to spot Champions, Loyal, and At‑Risk customers.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+
+
+        <!-- Impact & Metrics -->
+        <section>
+          <h2 class="section-title">6. Results &amp; Business Impact</h2>
+          <div class="section-body">
+            <p>
+              The RFM segmentation shifted the team from generic campaigns to data-driven targeting. Some of the key
+              outcomes:
+            </p>
+
+            <div class="metrics-grid">
+              <div class="metric-card">
+                <div class="metric-label">B2C Acquisition</div>
+                <div class="metric-value">+34.75%</div>
+                <div class="metric-note">growth in H1 2022, supported by targeted RFM-based campaigns.</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-label">Focus on High-Value Riders</div>
+                <div class="metric-value">Top 20%</div>
+                <div class="metric-note">of riders identified as “Champions” and “Loyal” for retention efforts.</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-label">Campaign Efficiency</div>
+                <div class="metric-value">Improved</div>
+                <div class="metric-note">better ROI from marketing by prioritizing high-value & reactivatable riders.</div>
+              </div>
+            </div>
+
+            <p>
+              Qualitatively, teams reported that:
+            </p>
+            <ul>
+              <li>It was easier to explain to leadership why certain segments were targeted.</li>
+              <li>They finally had a “single view” of customer value, pulling together trips and revenue.</li>
+              <li>Retention and reactivation strategies became a recurring topic in performance reviews.</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- Challenges -->
+        <section>
+          <h2 class="section-title">7. Challenges &amp; How I Addressed Them</h2>
+          <div class="section-body">
+            <p><strong>1. Data quality & missing values</strong></p>
+            <p>
+              Some customers had very few rides or inconsistent data. I:
+            </p>
+            <ul>
+              <li>Set minimum activity thresholds (e.g. at least 2 completed rides) for RFM inclusion.</li>
+              <li>Flagged suspicious records (e.g. negative fares, test accounts) and excluded them.</li>
+            </ul>
+
+            <p><strong>2. Choosing the right time window</strong></p>
+            <p>
+              The business was seasonal in some corridors, so choosing a lookback window was important.
+              I:
+            </p>
+            <ul>
+              <li>Tested 6-, 9-, and 12-month windows and compared stability of segments.</li>
+              <li>Aligned with stakeholders on a 12-month window to capture both frequent and seasonal riders.</li>
+            </ul>
+
+            <p><strong>3. Explaining RFM to non-technical stakeholders</strong></p>
+            <p>
+              RFM can feel abstract if you’re not used to it. To address this, I:
+            </p>
+            <ul>
+              <li>Created a simple explainer slide with real customer examples per segment.</li>
+              <li>Linked each segment to a proposed marketing action (e.g. upsell, reactivate, reward).</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- Lessons & Next -->
+        <section>
+          <h2 class="section-title">8. What I’d Improve Next</h2>
+          <div class="section-body">
+            <p>
+              If I had more time and resources, I would extend this work in a few ways:
+            </p>
+            <ul>
+              <li>
+                <strong>Add churn prediction:</strong> build a simple model using RFM + behaviour features
+                (routes, days of week) to predict likelihood of churn.
+              </li>
+              <li>
+                <strong>Test campaign uplift formally:</strong> run A/B tests comparing RFM-based targeting
+                vs generic campaigns.
+              </li>
+              <li>
+                <strong>Automate refresh:</strong> schedule a weekly RFM pipeline so segments are always
+                up-to-date for marketing and customer success teams.
+              </li>
+            </ul>
+
+            <p>
+              Overall, this project solidified my approach to turning raw transaction data into a
+              <strong>marketing and growth decision tool</strong> that non-technical teams could actually use.
+            </p>
+          </div>
+        </section>
+
+        <a href="index.html#projects" class="btn-back">
+          ← Back to all projects
+        </a>
+      </div>
+
+      <!-- SIDEBAR -->
+      <aside>
+        <div class="sidebar-card">
+          <h3>Project Snapshot</h3>
+          <div class="sidebar-label">Goal</div>
+          <p>
+            Understand customer value and behaviour to prioritize marketing and retention efforts across B2C riders.
+          </p>
+          <div class="sidebar-label" style="margin-top:8px;">My role</div>
+          <p>
+            End-to-end: from data exploration and RFM design to dashboard build and stakeholder training.
+          </p>
+        </div>
+
+        <div class="sidebar-card">
+          <h3>Tech Stack</h3>
+          <ul>
+            <li>Python (pandas, data preparation)</li>
+            <li>MySQL (data extraction & joins)</li>
+            <li>Tableau (dashboard & storytelling)</li>
+            <li>Excel (quick validation & export)</li>
+          </ul>
+          <div class="badge">
+            <span>✔</span>
+            <span>Reproducible RFM pipeline</span>
+          </div>
+        </div>
+
+        <div class="sidebar-card">
+          <h3>Key Outputs</h3>
+          <ul>
+            <li>RFM-scored customer table.</li>
+            <li>Customer segments: Champions, Loyal, Promising, At Risk, Low Value.</li>
+            <li>Interactive Tableau dashboard for marketing & growth teams.</li>
+            <li>Playbook on how to use each segment in campaigns.</li>
+          </ul>
+        </div>
+
+        <div class="sidebar-card">
+          <h3>How this translates to other roles</h3>
+          <p>
+            The same approach can be applied to e-commerce, banking, and subscription products:
+          </p>
+          <ul>
+            <li>Segmenting users for retention and upsell.</li>
+            <li>Designing loyalty programs based on RFM tiers.</li>
+            <li>Prioritizing high-value customers for white-glove support.</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+
+    <footer class="footer">
+      © <span id="year"></span> Ezinne Iroegbu · RFM Customer Segmentation Case Study
+    </footer>
+  </main>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
